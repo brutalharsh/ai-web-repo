@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualization Chart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .chart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            max-width: 90%;
+            width: 600px;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        canvas {
+            width: 100%;
+            height: 400px;
+            max-width: 100%;
+        }
+        .update-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .update-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chart-container">
+        <h2>Sample Data Visualization Chart</h2>
+        <canvas id="chartCanvas"></canvas>
+        <button class="update-button" onclick="updateChart()">Update Chart</button>
+    </div>
+
+    <script>
+        // Setup the canvas and context
+        const canvas = document.getElementById('chartCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Initial chart data
+        let chartData = [12, 19, 3, 5, 2, 3];
+        let chartLabels = ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'];
+
+        // Function to draw the chart
+        function drawChart(data, labels) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+
+            const barWidth = canvas.width / data.length;
+            const maxData = Math.max(...data);
+            const scaleFactor = (canvas.height - 20) / maxData;
+
+            data.forEach((value, index) => {
+                const barHeight = value * scaleFactor;
+                ctx.fillStyle = labels[index];
+                ctx.fillRect(index * barWidth, canvas.height - barHeight, barWidth - 10, barHeight);
+            });
+        }
+
+        // Function to update the chart with new data
+        function updateChart() {
+            chartData = chartData.map(value => Math.floor(Math.random() * 25));
+            drawChart(chartData, chartLabels);
+        }
+
+        // Initial chart draw
+        drawChart(chartData, chartLabels);
+    </script>
+</body>
+</html>
