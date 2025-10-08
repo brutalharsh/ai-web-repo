@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Picker Tool</title>
+    <style>
+        /* Root variables for easy customization */
+        :root {
+            --picker-width: 300px;
+            --picker-height: 200px;
+            --thumb-size: 15px;
+        }
+
+        /* Basic reset and styling for the body */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        /* Styling for the color picker component */
+        .color-picker {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: var(--picker-width);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Styling for the color display area */
+        .color-display {
+            width: 100%;
+            height: var(--picker-height);
+            background: linear-gradient(to right, #fff, #000), linear-gradient(to top, #f00, rgba(255, 255, 255, 0));
+            position: relative;
+            cursor: crosshair;
+        }
+
+        /* Styling for the draggable thumb */
+        .color-thumb {
+            width: var(--thumb-size);
+            height: var(--thumb-size);
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            position: absolute;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        /* Styling for the color value display */
+        .color-value {
+            padding: 10px;
+            width: calc(100% - 20px);
+            text-align: center;
+            background: #fafafa;
+            border-top: 1px solid #ccc;
+        }
+
+        /* Styling for the color value input */
+        .color-value input {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="color-picker">
+        <div class="color-display" id="colorDisplay">
+            <div class="color-thumb" id="colorThumb"></div>
+        </div>
+        <div class="color-value">
+            <input type="text" id="colorValue" readonly>
+        </div>
+    </div>
+
+    <script>
+        // Function to convert RGB to HEX
+        function rgbToHex(r, g, b) {
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+        }
+
+        // Function to get the color at a specific point in the canvas
+        function getColorAtPoint(x, y) {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = colorDisplay.clientWidth;
+            canvas.height = colorDisplay.clientHeight;
+
+            // Draw gradient on canvas
+            context.drawImage(colorDisplay, 0, 0, canvas.width, canvas.height);
+            const imageData = context.getImageData(x, y, 1, 1).data;
+            return {
+                r: imageData[0],
+                g: imageData[1],
+                b: imageData[2]
+            };
+        }
+
+        // Function to update the color thumb and input value
+        function updateColorPicker(x, y) {
+            const color = getColorAtPoint(x, y);
+            const hexColor = rgbToHex(color.r, color.g, color.b);
+            colorThumb.style.left = `${x}px`;
+            colorThumb.style.top = `${y}px`;
+            colorValue.value = hexColor;
+        }
+
+        const colorDisplay = document.getElementById('colorDisplay');
+        const colorThumb = document.getElementById('colorThumb');
+        const colorValue = document.getElementById('colorValue');
+
+        // Event listener for mouse move on the color display
+        colorDisplay.addEventListener('mousemove', (e) => {
+            if (e.buttons === 1) {
+                const rect = colorDisplay.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                updateColorPicker(x, y);
+            }
+        });
+
+        // Event listener for mouse click on the color display
+        colorDisplay.addEventListener('click', (e) => {
+            const rect = colorDisplay.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            updateColorPicker(x, y);
+        });
+    </script>
+</body>
+</html>
