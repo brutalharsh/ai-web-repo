@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rating/Review Component</title>
+    <style>
+        /* Base styles and responsive design */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f7f7f7;
+        }
+
+        .rating-container {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .rating-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .rating-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .stars {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .star {
+            font-size: 2em;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .star:hover,
+        .star.selected {
+            color: #ff9800;
+        }
+
+        .review-field {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+
+        .review-field textarea {
+            resize: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .review-field textarea:focus {
+            border-color: #ff9800;
+            outline: none;
+        }
+
+        .submit-btn {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #ff9800;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #e68900;
+        }
+    </style>
+</head>
+<body>
+    <div class="rating-container">
+        <h2 class="rating-header">Rate and Review</h2>
+        <div class="stars">
+            <span class="star" data-value="1">&#9733;</span>
+            <span class="star" data-value="2">&#9733;</span>
+            <span class="star" data-value="3">&#9733;</span>
+            <span class="star" data-value="4">&#9733;</span>
+            <span class="star" data-value="5">&#9733;</span>
+        </div>
+        <div class="review-field">
+            <textarea rows="4" placeholder="Write your review here..."></textarea>
+        </div>
+        <button class="submit-btn">Submit</button>
+    </div>
+    
+    <script>
+        // JavaScript for interactive functionality
+
+        // Select all star elements
+        const stars = document.querySelectorAll('.star');
+        let selectedRating = 0;
+
+        // Function to handle star click event
+        function handleStarClick(event) {
+            // Get the selected star's value
+            selectedRating = event.target.getAttribute('data-value');
+            
+            // Reset all stars
+            stars.forEach(star => star.classList.remove('selected'));
+            
+            // Highlight selected stars
+            for (let i = 0; i < selectedRating; i++) {
+                stars[i].classList.add('selected');
+            }
+        }
+
+        // Add click event listener to each star
+        stars.forEach(star => {
+            star.addEventListener('click', handleStarClick);
+        });
+
+        // Function to handle submit button click event
+        document.querySelector('.submit-btn').addEventListener('click', () => {
+            const reviewText = document.querySelector('.review-field textarea').value;
+            
+            if (selectedRating > 0 && reviewText.trim() !== '') {
+                alert(`Rating: ${selectedRating}\nReview: ${reviewText}`);
+            } else {
+                alert('Please provide a rating and a review.');
+            }
+        });
+    </script>
+</body>
+</html>
