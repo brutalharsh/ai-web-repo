@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator Widget</title>
+    <style>
+        /* Root and base styles */
+        :root {
+            --bg-color: #f5f5f5;
+            --primary-color: #007bff;
+            --text-color: #333;
+            --button-bg: #fff;
+            --button-border: #ddd;
+            --button-radius: 5px;
+            --button-hover: #e0e0e0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .calculator {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+        }
+        .calculator .display {
+            background: var(--primary-color);
+            color: #fff;
+            font-size: 2rem;
+            text-align: right;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .calculator .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding: 20px;
+        }
+        .calculator .button {
+            background: var(--button-bg);
+            border: 1px solid var(--button-border);
+            border-radius: var(--button-radius);
+            padding: 20px;
+            font-size: 1.5rem;
+            transition: background 0.3s;
+            cursor: pointer;
+            user-select: none;
+        }
+        .calculator .button:hover {
+            background: var(--button-hover);
+        }
+        .calculator .button.operation {
+            background: var(--primary-color);
+            color: #fff;
+        }
+        .calculator .button.double {
+            grid-column: span 2;
+        }
+        .calculator .button.triple {
+            grid-column: span 3;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <div class="buttons">
+            <div class="button" onclick="clearDisplay()">C</div>
+            <div class="button" onclick="appendOperator('/')">/</div>
+            <div class="button" onclick="appendOperator('*')">*</div>
+            <div class="button operation" onclick="deleteLast()">DEL</div>
+            <div class="button" onclick="appendNumber('7')">7</div>
+            <div class="button" onclick="appendNumber('8')">8</div>
+            <div class="button" onclick="appendNumber('9')">9</div>
+            <div class="button operation" onclick="appendOperator('-')">-</div>
+            <div class="button" onclick="appendNumber('4')">4</div>
+            <div class="button" onclick="appendNumber('5')">5</div>
+            <div class="button" onclick="appendNumber('6')">6</div>
+            <div class="button operation" onclick="appendOperator('+')">+</div>
+            <div class="button" onclick="appendNumber('1')">1</div>
+            <div class="button" onclick="appendNumber('2')">2</div>
+            <div class="button" onclick="appendNumber('3')">3</div>
+            <div class="button double" onclick="appendNumber('0')">0</div>
+            <div class="button" onclick="appendNumber('.')">.</div>
+            <div class="button operation" onclick="calculateResult()">=</div>
+        </div>
+    </div>
+
+    <script>
+        // Get the display element
+        const display = document.getElementById('display');
+
+        // Clear the display
+        function clearDisplay() {
+            display.textContent = '0';
+        }
+
+        // Append a number to the display
+        function appendNumber(number) {
+            if (display.textContent === '0') {
+                display.textContent = number;
+            } else {
+                display.textContent += number;
+            }
+        }
+
+        // Append an operator to the display
+        function appendOperator(operator) {
+            const lastChar = display.textContent.slice(-1);
+            if ('+-*/'.includes(lastChar)) {
+                display.textContent = display.textContent.slice(0, -1) + operator;
+            } else {
+                display.textContent += operator;
+            }
+        }
+
+        // Delete the last character from the display
+        function deleteLast() {
+            if (display.textContent.length > 1) {
+                display.textContent = display.textContent.slice(0, -1);
+            } else {
+                display.textContent = '0';
+            }
+        }
+
+        // Calculate the result and update the display
+        function calculateResult() {
+            try {
+                display.textContent = eval(display.textContent);
+            } catch (e) {
+                display.textContent = 'Error';
+            }
+        }
+    </script>
+</body>
+</html>
