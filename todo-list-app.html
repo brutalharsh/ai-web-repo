@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List Application</title>
+    <style>
+        /* Base styling for the application */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .todo-app {
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .todo-header {
+            background: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .todo-form {
+            display: flex;
+            padding: 20px;
+            border-bottom: 1px solid #e3e3e3;
+        }
+
+        .todo-form input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #e3e3e3;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .todo-form button {
+            padding: 10px 20px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .todo-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .todo-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-bottom: 1px solid #e3e3e3;
+        }
+
+        .todo-list li:nth-child(odd) {
+            background: #f9f9f9;
+        }
+
+        .todo-list button {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="todo-app">
+        <div class="todo-header">To-Do List</div>
+        <div class="todo-form">
+            <input type="text" id="todo-input" placeholder="Add a new task">
+            <button onclick="addTodo()">Add</button>
+        </div>
+        <ul class="todo-list" id="todo-list">
+            <!-- To-Do items will be appended here -->
+        </ul>
+    </div>
+
+    <script>
+        // Function to add a new to-do item
+        function addTodo() {
+            const todoInput = document.getElementById('todo-input');
+            const todoText = todoInput.value.trim();
+
+            if (todoText === '') return;
+
+            const todoList = document.getElementById('todo-list');
+
+            // Create new list item
+            const listItem = document.createElement('li');
+            listItem.textContent = todoText;
+
+            // Create delete button for the list item
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.onclick = function() {
+                todoList.removeChild(listItem);
+            };
+
+            listItem.appendChild(deleteButton);
+            todoList.appendChild(listItem);
+
+            // Clear the input
+            todoInput.value = '';
+        }
+    </script>
+</body>
+</html>
