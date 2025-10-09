@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop Interface</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #f1f1f1;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: var(--secondary-color);
+        }
+
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        section {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            padding: 10px;
+            border: 2px dashed var(--primary-color);
+            border-radius: 8px;
+            background-color: var(--secondary-color);
+            min-width: 200px;
+            min-height: 200px;
+        }
+
+        .draggable-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .draggable-item:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <section aria-label="Draggable items" id="draggable-items">
+            <div class="draggable-item" tabindex="0" draggable="true">Item 1</div>
+            <div class="draggable-item" tabindex="0" draggable="true">Item 2</div>
+            <div class="draggable-item" tabindex="0" draggable="true">Item 3</div>
+            <div class="draggable-item" tabindex="0" draggable="true">Item 4</div>
+        </section>
+        <section aria-label="Drop zone" id="drop-zone">
+        </section>
+    </main>
+
+    <script>
+        const draggableItems = document.querySelectorAll('.draggable-item');
+        const dropZone = document.getElementById('drop-zone');
+
+        // Add event listeners for drag events
+        draggableItems.forEach(item => {
+            item.addEventListener('dragstart', handleDragStart);
+            item.addEventListener('dragend', handleDragEnd);
+        });
+
+        dropZone.addEventListener('dragover', handleDragOver);
+        dropZone.addEventListener('drop', handleDrop);
+
+        function handleDragStart(event) {
+            event.dataTransfer.setData('text/plain', event.target.innerText);
+            event.target.classList.add('dragging');
+        }
+
+        function handleDragEnd(event) {
+            event.target.classList.remove('dragging');
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            const data = event.dataTransfer.getData('text/plain');
+            const item = document.createElement('div');
+            item.className = 'draggable-item';
+            item.innerText = data;
+            item.setAttribute('draggable', 'true');
+            item.setAttribute('tabindex', '0');
+            dropZone.appendChild(item);
+
+            // Add event listeners to the new draggable item
+            item.addEventListener('dragstart', handleDragStart);
+            item.addEventListener('dragend', handleDragEnd);
+        }
+    </script>
+</body>
+</html>
