@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infinite Scroll Component</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+    .infinite-scroll-container {
+      width: 90%;
+      max-width: 600px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .items {
+      display: flex;
+      flex-direction: column;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .item {
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+    }
+    .loader {
+      padding: 20px;
+      text-align: center;
+    }
+    .loader.hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="infinite-scroll-container" role="feed" aria-live="polite">
+    <div class="items" id="items">
+      <!-- Items will be dynamically loaded here -->
+    </div>
+    <div class="loader hidden" id="loader" role="alert" aria-busy="true">Loading...</div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const itemsContainer = document.getElementById('items');
+      const loader = document.getElementById('loader');
+      let isFetching = false;
+
+      // Mock function to simulate fetching data
+      function fetchData() {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            const items = [];
+            for (let i = 0; i < 10; i++) {
+              items.push(`Item ${Math.floor(Math.random() * 1000)}`);
+            }
+            resolve(items);
+          }, 1000);
+        });
+      }
+
+      // Function to load more items
+      async function loadMoreItems() {
+        if (isFetching) return;
+        isFetching = true;
+        loader.classList.remove('hidden');
+
+        const newItems = await fetchData();
+        newItems.forEach(itemText => {
+          const item = document.createElement('div');
+          item.classList.add('item');
+          item.textContent = itemText;
+          itemsContainer.appendChild(item);
+        });
+
+        loader.classList.add('hidden');
+        isFetching = false;
+      }
+
+      // Infinite scroll logic
+      itemsContainer.addEventListener('scroll', () => {
+        if (itemsContainer.scrollTop + itemsContainer.clientHeight >= itemsContainer.scrollHeight - 10) {
+          loadMoreItems();
+        }
+      });
+
+      // Initial load
+      loadMoreItems();
+    });
+  </script>
+</body>
+</html>
