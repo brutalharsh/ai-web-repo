@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Display Component</title>
+    <style>
+        /* Base styles for body */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f0f0f0;
+        }
+
+        /* Container for the weather display */
+        .weather-container {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 300px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .weather-container:hover {
+            transform: scale(1.05);
+        }
+
+        /* Location display styles */
+        .location {
+            background: #4a90e2;
+            color: #fff;
+            padding: 1em;
+        }
+
+        /* Main weather display styles */
+        .weather-main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1em;
+        }
+
+        .weather-icon {
+            width: 100px;
+            height: 100px;
+        }
+
+        .temperature {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 0.5em 0;
+        }
+
+        .condition {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        /* Hidden details section styles */
+        .details {
+            display: none;
+            background: #f9f9f9;
+            padding: 1em;
+            text-align: left;
+        }
+
+        .details p {
+            margin: 0.5em 0;
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .weather-container {
+                width: 100%;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="weather-container" onclick="toggleDetails()">
+        <div class="location" id="location">Loading...</div>
+        <div class="weather-main">
+            <img src="" id="weather-icon" class="weather-icon" alt="Weather Icon">
+            <div class="temperature" id="temperature">--°C</div>
+            <div class="condition" id="condition">---</div>
+        </div>
+        <div class="details" id="details">
+            <p id="humidity">Humidity: --%</p>
+            <p id="wind-speed">Wind Speed: -- m/s</p>
+        </div>
+    </div>
+
+    <script>
+        // Function to fetch and display weather data
+        async function fetchWeatherData() {
+            try {
+                const apiKey = 'YOUR_API_KEY'; // Replace with your OpenWeatherMap API key
+                const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=London&units=metric&appid=${apiKey}`);
+                const data = await response.json();
+                
+                // Update HTML elements with fetched data
+                document.getElementById('location').innerText = data.name;
+                document.getElementById('temperature').innerText = `${Math.round(data.main.temp)}°C`;
+                document.getElementById('condition').innerText = data.weather[0].description;
+                document.getElementById('weather-icon').src = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+                document.getElementById('humidity').innerText = `Humidity: ${data.main.humidity}%`;
+                document.getElementById('wind-speed').innerText = `Wind Speed: ${data.wind.speed} m/s`;
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+            }
+        }
+
+        // Function to toggle the visibility of the details section
+        function toggleDetails() {
+            const details = document.getElementById('details');
+            details.style.display = details.style.display === 'none' || details.style.display === '' ? 'block' : 'none';
+        }
+
+        // Fetch weather data when the page loads
+        document.addEventListener('DOMContentLoaded', fetchWeatherData);
+    </script>
+</body>
+</html>
