@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabbed Content Interface</title>
+    <style>
+        /* Basic reset for margin and padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .tabs {
+            display: flex;
+            flex-direction: column;
+            width: 90%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .tab-list {
+            display: flex;
+            cursor: pointer;
+            background-color: #007bff;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 1rem;
+            text-align: center;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+
+        .tab:hover {
+            background-color: #0056b3;
+        }
+
+        .tab.active {
+            background-color: #003d80;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 1rem;
+            background-color: #fff;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .tab-list {
+                flex-direction: column;
+            }
+
+            .tab {
+                padding: 0.75rem;
+            }
+
+            .tab-content {
+                padding: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="tabs">
+    <div class="tab-list">
+        <div class="tab active" data-tab="tab1">Tab 1</div>
+        <div class="tab" data-tab="tab2">Tab 2</div>
+        <div class="tab" data-tab="tab3">Tab 3</div>
+    </div>
+    <div id="tab1" class="tab-content active">
+        <h2>Content for Tab 1</h2>
+        <p>This is the content for tab 1.</p>
+    </div>
+    <div id="tab2" class="tab-content">
+        <h2>Content for Tab 2</h2>
+        <p>This is the content for tab 2.</p>
+    </div>
+    <div id="tab3" class="tab-content">
+        <h2>Content for Tab 3</h2>
+        <p>This is the content for tab 3.</p>
+    </div>
+</div>
+
+<script>
+    // Select all tabs and tab content
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Remove active class from all tabs and contents
+            tabs.forEach(item => item.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            // Add active class to the clicked tab and associated content
+            tab.classList.add('active');
+            document.getElementById(tab.dataset.tab).classList.add('active');
+        });
+    });
+</script>
+
+</body>
+</html>
