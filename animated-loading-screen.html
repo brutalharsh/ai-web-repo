@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Loading Screen</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Ensure full height for parent containers */
+        html, body {
+            height: 100%;
+        }
+
+        /* Flexbox container for centering the loader */
+        .loading-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0; /* light grey background */
+        }
+
+        /* Loader animation styles */
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db; /* blue color for the spinning part */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Keyframes for the spin animation */
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .loader {
+                width: 30px;
+                height: 30px;
+                border: 6px solid #f3f3f3;
+                border-top: 6px solid #3498db;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading screen container -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader"></div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Simulate a delay to display the loading screen
+            setTimeout(() => {
+                // Hide the loading screen after 3 seconds
+                document.getElementById('loadingScreen').style.display = 'none';
+            }, 3000); // Change this delay as needed
+        });
+    </script>
+</body>
+
+</html>
